@@ -27,7 +27,6 @@ app.get('/', (req, res) => {
 })
 
 app.get('/todos/new', (req, res) => {
-  console.log('into get/todos/new')
   return res.render('new')
 })
 
@@ -54,7 +53,6 @@ app.get('/todos/:id/edit', (req, res) => {
     .catch(error => console.log(error))
 })
 app.post('/todos/:id', (req, res) => {
-  console.log(req.body)
   const id = req.params.id
   const name = req.body.name
   return Todo.findById(id)
@@ -64,6 +62,14 @@ app.post('/todos/:id', (req, res) => {
     })
     .then(() => res.redirect(`/todos/${id}`))
     .catch(erorr => console.log(error))
+})
+
+app.post('/todos/:id/delete', (req, res) => {
+  const id = req.params.id
+  return Todo.findById(id)
+    .then(todo => todo.remove())
+    .then(() => res.redirect('/'))
+    .catch(error => console.log(error))
 })
 app.listen(port, () => {
   console.log(`app is running on http://localhost:${port}`)
